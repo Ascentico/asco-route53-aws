@@ -1,4 +1,4 @@
-resource "aws_route53_zone" "ascentico" {
+resource "aws_route53_zone" "ascentico_com" {
   name         = "ascentico.com."
 
   tags {
@@ -9,4 +9,3 @@ resource "aws_route53_zone" "ascentico" {
   }
 
 }
-
