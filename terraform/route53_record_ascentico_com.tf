@@ -3,9 +3,9 @@
 resource "aws_route53_record" "www_ascentico_com" {
   zone_id = "${aws_route53_zone.ascentico_com.id}"
   name    = "www.${aws_route53_zone.ascentico_com.name}"
-  type    = "A"
+  type    = "CNAME"
   ttl     = "3600"
-  records = ["82.71.62.199"]
+  records = ["ascentico-public.s3-website-eu-west-1.amazonaws.com"]
 }
 
 resource "aws_route53_record" "mail_ascentico_com" {
