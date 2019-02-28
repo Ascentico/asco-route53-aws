@@ -13,85 +13,46 @@ resource "aws_route53_record" "mail_ascentico_com" {
   name    = "mail.${aws_route53_zone.ascentico_com.name}"
   type    = "CNAME"
   ttl     = "3600"
-  records = ["mail.office365.com"]
+  records = ["ghs.googlehosted.com."]
 }
 
-# Exchange Online
+resource "aws_route53_record" "calendar_ascentico_com" {
+  zone_id = "${aws_route53_zone.ascentico_com.id}"
+  name    = "calendar.${aws_route53_zone.ascentico_com.name}"
+  type    = "CNAME"
+  ttl     = "3600"
+  records = ["ghs.googlehosted.com."]
+}
+
+resource "aws_route53_record" "statuscode_ascentico_com" {
+  zone_id = "${aws_route53_zone.ascentico_com.id}"
+  name    = "statuscode.${aws_route53_zone.ascentico_com.name}"
+  type    = "A"
+  ttl     = "3600"
+  records = ["82.71.62.199"]
+}
+
+resource "aws_route53_record" "api_statuscode_ascentico_com" {
+  zone_id = "${aws_route53_zone.ascentico_com.id}"
+  name    = "api.statuscode.${aws_route53_zone.ascentico_com.name}"
+  type    = "A"
+  ttl     = "3600"
+  records = ["82.71.62.199"]
+}
+
+# G Suite
 
 resource "aws_route53_record" "root_mx_ascentico_com" {
   zone_id = "${aws_route53_zone.ascentico_com.id}"
   name    = "ascentico.com"
   type    = "MX"
   ttl     = "3600"
-  records = ["0 ascentico-com.mail.protection.outlook.com"]
-}
-
-resource "aws_route53_record" "root_spf_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "ascentico.com"
-  type    = "TXT"
-  ttl     = "3600"
-  records = ["v=spf1 include:spf.protection.outlook.com -all"]
-}
-
-resource "aws_route53_record" "autodiscover_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "autodiscover.${aws_route53_zone.ascentico_com.name}"
-  type    = "CNAME"
-  ttl     = "3600"
-  records = ["autodiscover.outlook.com"]
-}
-
-# Skype for Business
-
-resource "aws_route53_record" "sip_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "sip.${aws_route53_zone.ascentico_com.name}"
-  type    = "CNAME"
-  ttl     = "3600"
-  records = ["sipdir.online.lync.com"]
-}
-
-resource "aws_route53_record" "lyncdiscover_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "lyncdiscover.${aws_route53_zone.ascentico_com.name}"
-  type    = "CNAME"
-  ttl     = "3600"
-  records = ["webdir.online.lync.com"]
-}
-
-resource "aws_route53_record" "srv_sip_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "_sip._tls"
-  type    = "SRV"
-  ttl     = "3600"
-  records = ["100 1 443 sipdir.online.lync.com"]
-}
-
-resource "aws_route53_record" "srv_sipfederationtls_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "_sipfederationtls._tcp"
-  type    = "SRV"
-  ttl     = "3600"
-  records = ["100 1 5061 sipfed.online.lync.com"]
-}
-
-# Mobile Device Management for Office 365
-
-resource "aws_route53_record" "enterpriseregistration_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "enterpriseregistration.${aws_route53_zone.ascentico_com.name}"
-  type    = "CNAME"
-  ttl     = "3600"
-  records = ["enterpriseregistration.windows.net"]
-}
-
-resource "aws_route53_record" "enterpriseenrollment_ascentico_com" {
-  zone_id = "${aws_route53_zone.ascentico_com.id}"
-  name    = "enterpriseenrollment.${aws_route53_zone.ascentico_com.name}"
-  type    = "CNAME"
-  ttl     = "3600"
-  records = ["enterpriseenrollment.manage.microsoft.com"]
+  records = ["1 aspmx.l.google.com.",
+             "5 alt1.aspmx.l.google.com.",
+             "5 alt2.aspmx.l.google.com.",
+             "10 alt3.aspmx.l.google.com.",
+             "10 alt2.aspmx.l.google.com."
+            ]
 }
 
 # Amazon SES Verification
@@ -102,6 +63,15 @@ resource "aws_route53_record" "amazon_ses_ascentico_com" {
   type    = "TXT"
   ttl     = "3600"
   records = ["9dTTorcSlhJdoldGgS9lHXpVvkdtQDXA0XWqsu891Eo="]
+}
+
+resource "aws_route53_record" "gsuite_dkim_ascentico_com" {
+  zone_id = "${aws_route53_zone.ascentico_com.id}"
+  name    = "google._domainkey.${aws_route53_zone.ascentico_com.name}"
+  type    = "TXT"
+  ttl     = "3600"
+  records = [
+    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AM\"\"IIBCgKCAQEAkksMB/Mu4y9hlQb+Dojp6uRnKCJ3Wd3nrTdRS0xq\"\"pN1VacKl2aOxw5jHQLdcZg7w0vaM2Mc0BuxpMSyIBPzzf5woyY1\"\"p9mMwkiS62Vi0mfX0xh4hHo23bRWJzxUpTYAidx0csv3260TysS\"\"PJi6FSyPB5TJul0kTqeUqjJ9LjOaW59zwXNl9IwxcWnMawnAdJd\"\"bejUiNOe2HpW0wJbXPA4y6rZl2rtUAofe4S3RSNSth+bvRib/Ra\"\"BdbTyI7ZfKqNtBnWEw6bWCtvSYhJVDN6nMzUhRrpWN+EgWpxTCZ\"\"YdNssXH9f0J4ZDNuEliU2d6od3AFkqmQfTUFlQqa9yx9m/QIDAQ\"\"AB"]
 }
 
 # Amazon SES DKIM Settings
